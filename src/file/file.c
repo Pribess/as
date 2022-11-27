@@ -1,7 +1,6 @@
 /*
         Copyright (C) 2022 Pribess (Heewon Cho)
-        src/arch/x86/x86.c
+        src/file/file.c
 */
 
-#include <arch/x86/x86.h>
-
+#include <file/file.h>

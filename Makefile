@@ -8,8 +8,9 @@ ARFLAGS = rcus
 TARGET = iasm
 LIB = libiasm.a
 
-INCLUDEDIR = ./include
-SOURCES = $(shell find . -name "*.c")
+INCLUDEDIR = -I./include -I./
+INCLUDEDIR += -I./deps/ics/include
+SOURCES = $(shell find ./src -name "*.c")
 OBJECTS = $(SOURCES:.c=.o)
 
 .PHONY: all
@@ -24,7 +25,7 @@ $(LIB) : $(OBJECTS)
 
 
 %.o : %.c
-	$(CC) -I$(INCLUDEDIR) -c $(CFLAGS) $< -o $(notdir $@)
+	$(CC) $(INCLUDEDIR) -c $(CFLAGS) $< -o $(notdir $@)
 
 
 .PHONY: clean
