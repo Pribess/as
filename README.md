@@ -1,2 +1,2 @@
-# iasm
+# as
 Improved Assembler

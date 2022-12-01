@@ -1,9 +1,9 @@
 /*
         Copyright (C) 2022 Pribess (Heewon Cho)
-        src/parser/parser.c
+        src/parser.c
 */
 
-#include <parser/parser.h>
+#include "parser.h"
 
 char **tokenize(const char *src) {
     const char *str = src;

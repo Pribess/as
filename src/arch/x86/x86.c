@@ -3,5 +3,5 @@
         src/arch/x86/x86.c
 */
 
-#include <arch/x86/x86.h>
+#include "x86.h"
 
