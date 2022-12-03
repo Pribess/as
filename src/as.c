@@ -6,23 +6,18 @@
 #define AS_VERSION "0.01"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <locale.h>
+
+void parse_arg(int argc, char **argv);
+void usage();
+void version();
+void help();
 
 int main(int argc, char *argv[]) {
     setlocale(LC_ALL, "");
 
-    argc--;
-    argv++;
-
-    if (argc < 1) {
-            printf("usage: as [-v] file\n");
-            return 1;
-    }
-
-    if (argc > 0 && (*argv)[0] == '-' && (*argv)[1] == 'v') {
-            printf("as %s (%s, %s)\n", AS_VERSION, __DATE__, __TIME__);
-            return 0;
-    }
+    parse_arg(argc, argv);
 
     // this must be at file part of as
     // FILE *fp;
@@ -33,4 +28,47 @@ int main(int argc, char *argv[]) {
 
 //     tokenize("xor eax, eax\nmov eax, 1\npush eax");
 
+}
+
+void parse_arg(int argc, char **argv) {
+    argc--;
+    argv++;
+    
+    if (argc < 1) {
+            usage();
+            exit(EXIT_FAILURE);
+    }
+
+    if ((*argv)[0] == '-') {
+        switch ((*argv)[1]) {
+            case 'v': {
+                version();
+                exit(EXIT_SUCCESS);
+                break;
+            }
+            case 'h': {
+                help();
+                exit(EXIT_SUCCESS);
+            }
+        }
+    }
+
+}
+
+void usage() {
+    printf("usage: as [options...] filename\n");
+}
+
+void version() {
+    printf("as version %s (%s, %s)\n", AS_VERSION, __DATE__, __TIME__);
+}
+
+const char *option_descriptions[] = { 
+    "-v\t\tprint version and compiled time then exit"
+};
+
+void help() {
+    for (int i = 0 ; i < sizeof(option_descriptions) / sizeof(*option_descriptions) ; i++) {
+        printf("%s\n", option_descriptions[i]);
+    }
 }
