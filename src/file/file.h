@@ -1,6 +1,6 @@
 /*
-        Copyright (C) 2022 Pribess (Heewon Cho)
-        src/file/file.h
+		Copyright (C) 2022 Pribess (Heewon Cho)
+		src/file/file.h
 */
 
 #ifndef FILE_H
@@ -8,6 +8,6 @@
 
 #include <stdio.h>
 
-
+FILE *file_open();
 
 #endif

@@ -1,6 +1,6 @@
 /*
-        Copyright (C) 2022 Pribess (Heewon Cho)
-        src/parser.h
+	Copyright (C) 2022 Pribess (Heewon Cho)
+	src/parser.h
 */
 
 #ifndef PARSER_H
