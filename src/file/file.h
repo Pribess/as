@@ -7,7 +7,10 @@
 #define FILE_H
 
 #include <stdio.h>
+#include <string.h>
 
-FILE *file_open();
+#include "../err.h"
+
+FILE *as_open_file(const char *filename);
 
 #endif

@@ -9,25 +9,25 @@
 #include <stdlib.h>
 #include <locale.h>
 
+#include "file/file.h"
+
+char *filename = NULL;
+
+void init();
 void parse_arg(int argc, char **argv);
 void usage();
 void version();
 void help();
 
 int main(int argc, char *argv[]) {
-	setlocale(LC_ALL, "");
 
+	init();
 	parse_arg(argc, argv);
 
-	// this must be at file part of as
-	// FILE *fp;
-	// if ((fp = fopen(*argv, "r")) == NULL) {
-	//         printf("as: %s: %s\n", *argv, strerror(errno));
-	//         return 1;
-	// }
+}
 
-//     tokenize("xor eax, eax\nmov eax, 1\npush eax");
-
+void init() {
+	setlocale(LC_ALL, "");
 }
 
 void parse_arg(int argc, char **argv) {
@@ -36,23 +36,47 @@ void parse_arg(int argc, char **argv) {
 	
 	if (argc < 1) {
 			usage();
-			exit(EXIT_FAILURE);
+			as_exit(EXIT_FAILURE);
 	}
 
-	if ((*argv)[0] == '-') {
-		switch ((*argv)[1]) {
-			case 'v': {
-				version();
-				exit(EXIT_SUCCESS);
-				break;
+	while (argc--) {
+		if ((*argv)[0] == '-') {
+			if ((*argv)[2] == 0x00) {
+				switch ((*argv)[1]) {
+					case 'v': {
+						version();
+						as_exit(EXIT_SUCCESS);
+						break;
+					}
+					case 'h': {
+						help();
+						as_exit(EXIT_SUCCESS);
+						break;
+					}
+					default: goto err; /* if option does not exists */
+				}
+			} else { /* if option is too long */
+				goto err;
 			}
-			case 'h': {
-				help();
-				exit(EXIT_SUCCESS);
-			}
+		} else { /* if it is input file */
+			if (argc) /* if arguments still left */
+				as_abort_msg("too much arguments");
+
+			filename = *argv;
+			return;
 		}
+		argv++;
 	}
 
+	/* if not returned on the upper loop */
+	as_abort_msg("no input file");
+
+	err: {
+		char *msg = malloc(sizeof("unknown option: ") + strlen(*argv));
+		sprintf(msg, "unknown option: '%s'", *argv);
+		as_abort_msg(msg);
+		free(msg);
+	}
 }
 
 void usage() {
