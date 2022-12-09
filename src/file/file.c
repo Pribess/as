@@ -5,15 +5,50 @@
 
 #include "file.h"
 
-FILE *as_open_file(const char *filename) {
-	FILE *fp;
+FILE *as_openfile(const char *filename) {
+	FILE *stream;
 
-	if (!(fp = fopen(filename, "r"))) {
-		char *prefix = malloc(sizeof("as: ") + strlen(filename));
+	if (!(stream = fopen(filename, "r"))) {
+		char *prefix = as_malloc(sizeof("as: ") + strlen(filename));
 		sprintf(prefix, "%s%s", "as: ", filename);
-		as_abort(prefix);
+		as_abort_prefix(prefix);
 		free(prefix);
 	}
 
-	return fp;
+	return stream;
+}
+
+char *as_readline(FILE *stream) {
+	/* check if file is empty */
+	if (fgetc(stream) == EOF) {
+		return NULL;
+	} else {
+		rewind(stream);
+	}
+
+	const size_t block = 16;
+	char *line = as_malloc(block);
+	int idx = 0;
+
+	while (!feof(stream)) {
+		if (!fgets(line + idx, block, stream)) {
+			as_abort();
+		}
+
+		/* if contains line feed or is end-of-file */
+		if ((line + idx)[strlen(line + idx) - 1] == '\n') {
+			line = as_realloc(line, idx + strlen(line));
+			/* substitute line feed to null terminator */
+			line[strlen(line) - 1] = 0x00;
+			return line;
+		} else if (feof(stream)) {
+			line = as_realloc(line, idx + strlen(line));
+			return line;
+		} else {
+			idx += 16;
+			line = as_realloc(line, idx + 16);
+		}
+	}
+
+	return NULL;
 }

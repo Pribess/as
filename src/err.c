@@ -9,8 +9,13 @@ void as_exit(int code) {
     exit(code);
 }
 
-/* abort with system error message */
-void as_abort(const char *prefix) {
+void as_abort() {
+    perror("as");
+    as_exit(EXIT_FAILURE);
+}
+
+/* abort with system error message and custom prefix */
+void as_abort_prefix(const char *prefix) {
     perror(prefix);
     as_exit(EXIT_FAILURE);
 }

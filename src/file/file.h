@@ -9,8 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../alloc.h"
 #include "../err.h"
 
-FILE *as_open_file(const char *filename);
+FILE *as_openfile(const char *filename);
+char *as_readline(FILE *stream);
 
 #endif

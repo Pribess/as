@@ -7,12 +7,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <locale.h>
 
+#include "assemble.h"
 #include "file/file.h"
 
 char *filename = NULL;
 
+void assemble();
 void init();
 void parse_arg(int argc, char **argv);
 void usage();
@@ -23,6 +26,7 @@ int main(int argc, char *argv[]) {
 
 	init();
 	parse_arg(argc, argv);
+	assemble();
 
 }
 
