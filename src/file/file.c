@@ -45,8 +45,8 @@ char *as_readline(FILE *stream) {
 			line = as_realloc(line, idx + strlen(line));
 			return line;
 		} else {
-			idx += 16;
-			line = as_realloc(line, idx + 16);
+			idx += block;
+			line = as_realloc(line, idx + block);
 		}
 	}
 
