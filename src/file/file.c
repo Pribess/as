@@ -19,12 +19,6 @@ FILE *as_openfile(const char *filename) {
 }
 
 char *as_readline(FILE *stream) {
-	/* check if file is empty */
-	if (fgetc(stream) == EOF) {
-		return NULL;
-	} else {
-		rewind(stream);
-	}
 
 	const size_t block = 16;
 	char *line = as_malloc(block);
@@ -32,6 +26,10 @@ char *as_readline(FILE *stream) {
 
 	while (!feof(stream)) {
 		if (!fgets(line + idx, block, stream)) {
+			/* check if file is empty */
+			if (fgetc(stream) == EOF) {
+				return NULL;
+			}
 			as_abort();
 		}
 
