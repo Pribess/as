@@ -19,6 +19,9 @@ FILE *as_openfile(const char *filename) {
 }
 
 char *as_readline(FILE *stream) {
+	if (!stream) {
+		return NULL;
+	}
 
 	const size_t block = 16;
 	char *line = as_malloc(block);
