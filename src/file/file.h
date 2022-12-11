@@ -14,5 +14,6 @@
 
 FILE *as_openfile(const char *filename);
 char *as_readline(FILE *stream);
+char **as_readall(FILE *stream, int *count);
 
 #endif

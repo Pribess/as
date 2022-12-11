@@ -53,3 +53,23 @@ char *as_readline(FILE *stream) {
 
 	return NULL;
 }
+
+char **as_readall(FILE* stream, int *count) {
+	*count = 0;
+	size_t size = 64;
+	char **list = as_malloc(size * sizeof(char *));
+
+	while ((list[(*count)++] = as_readline(stream))) {
+		/* double-up size if list overflows */
+		if (*count >= size) {
+			size *= 2;
+			list = as_realloc(list, size * sizeof(char *));
+		}
+	}
+
+	(*count)--;
+
+	/* resize to fit */
+	list = as_realloc(list, *count * sizeof(char *));
+	return list;
+}

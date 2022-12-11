@@ -23,7 +23,7 @@ void version();
 void help();
 
 int main(int argc, char *argv[]) {
-	
+
 	init();
 	parse_arg(argc, argv);
 	assemble();
