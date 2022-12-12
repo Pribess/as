@@ -92,11 +92,14 @@ void version() {
 }
 
 const char *option_descriptions[] = { 
-	"-v\t\tprint version and compiled time then exit"
+	"-v\t\tprint version and compiled time then exit",
+	NULL
 };
 
 void help() {
-	for (int i = 0 ; i < sizeof(option_descriptions) / sizeof(*option_descriptions) ; i++) {
-		printf("%s\n", option_descriptions[i]);
+	int i = 0;
+
+	while (option_descriptions[i++]) {
+		printf("%s\n", option_descriptions[i - 1]);
 	}
 }
