@@ -97,9 +97,9 @@ const char *option_descriptions[] = {
 };
 
 void help() {
-	int i = 0;
+	int i = -1;
 
-	while (option_descriptions[i++]) {
-		printf("%s\n", option_descriptions[i - 1]);
+	while (option_descriptions[++i]) {
+		printf("%s\n", option_descriptions[i]);
 	}
 }

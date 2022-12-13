@@ -10,4 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "file/file.h"
+#include "alloc.h"
+
+char **as_preproc(char **src, int *cnt);
+
 #endif

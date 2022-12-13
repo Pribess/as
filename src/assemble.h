@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 #include "file/file.h"
+#include "parser.h"
 
 extern char *filename;
 

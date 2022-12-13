@@ -10,7 +10,7 @@ FILE *as_openfile(const char *filename) {
 
 	if (!(stream = fopen(filename, "r"))) {
 		char *prefix = as_malloc(sizeof("as: ") + strlen(filename));
-		sprintf(prefix, "%s%s", "as: ", filename);
+		sprintf(prefix, "%s'%s'", "as: ", filename);
 		as_abort_prefix(prefix);
 		free(prefix);
 	}
@@ -24,7 +24,7 @@ char *as_readline(FILE *stream) {
 	}
 
 	const size_t block = 16;
-	char *line = as_malloc(block);
+	char *line = as_malloc(block * sizeof(char));
 	int idx = 0;
 
 	while (!feof(stream)) {
