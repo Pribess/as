@@ -51,5 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Visual Studio Code stuff
 .vscode/
+
+# Jetbrains Fleet stuff
+compile_commands.json
+
 as

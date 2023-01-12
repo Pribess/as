@@ -23,3 +23,13 @@ $(TARGET) : $(OBJECTS)
 
 clean:
 	rm -f $(TARGET) *.o
+
+# compilation database generator
+
+.PHONY: db
+
+db:
+	compiledb -n make
+
+cleandb:
+	rm -f compile_commands.json
