@@ -13,8 +13,6 @@
 #include "file/file.h"
 #include "parser.h"
 
-extern char *filename;
-
-void assemble();
+void assemble(const char *filename);
 
 #endif

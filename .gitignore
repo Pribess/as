@@ -52,9 +52,10 @@ Mkfile.old
 dkms.conf
 
 # Visual Studio Code stuff
-.vscode/
+.vscode
 
 # Jetbrains Fleet stuff
+.cache
 compile_commands.json
 
 as

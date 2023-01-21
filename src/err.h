@@ -8,10 +8,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 void as_exit(int code);
+
 void as_abort();
 void as_abort_prefix(const char *prefix);
 void as_abort_msg(const char *msg);
+
+void as_warn_msg(const char *fmsg, ...);
 
 #endif

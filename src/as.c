@@ -13,11 +13,8 @@
 #include "assemble.h"
 #include "file/file.h"
 
-char *filename = NULL;
-
-void assemble();
 void init();
-void parse_arg(int argc, char **argv);
+const char *parse_arg(int argc, char **argv);
 void usage();
 void version();
 void help();
@@ -25,8 +22,7 @@ void help();
 int main(int argc, char *argv[]) {
 
 	init();
-	parse_arg(argc, argv);
-	assemble();
+	assemble(parse_arg(argc, argv));
 
 }
 
@@ -34,7 +30,7 @@ void init() {
 	setlocale(LC_ALL, "");
 }
 
-void parse_arg(int argc, char **argv) {
+const char *parse_arg(int argc, char **argv) {
 	argc--;
 	argv++;
 	
@@ -66,8 +62,7 @@ void parse_arg(int argc, char **argv) {
 			if (argc) /* if arguments still left */
 				as_abort_msg("too much arguments");
 
-			filename = *argv;
-			return;
+			return *argv;
 		}
 		argv++;
 	}
@@ -81,6 +76,9 @@ void parse_arg(int argc, char **argv) {
 		as_abort_msg(msg);
 		free(msg);
 	}
+
+	/* control flow never reaches here */
+	return NULL;
 }
 
 void usage() {

@@ -24,7 +24,7 @@ $(TARGET) : $(OBJECTS)
 clean:
 	rm -f $(TARGET) *.o
 
-# compilation database generator
+# compilation database generator for Jetbrains Fleet
 
 .PHONY: db
 

@@ -25,3 +25,12 @@ void as_abort_msg(const char *msg) {
     fprintf(stderr, "as: %s\n", msg);
     as_exit(EXIT_FAILURE);
 }
+
+/* print warning with custom warning message */
+void as_warn_msg(const char *fmsg, ...) {
+	va_list list;
+	va_start(list, fmsg);
+	vfprintf(stdout, fmsg, list);
+	va_end(list);
+	printf("\n");
+}

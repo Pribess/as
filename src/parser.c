@@ -4,14 +4,19 @@
 */
 
 #include "parser.h"
+#include "alloc.h"
+#include "err.h"
 
-char **as_preproc(char **src, int *cnt) {
+char **as_preproc(const char *filename, char **src, int *cnt) {
 	int i = 0;
 
+	/* iterate lines */
 	while (src[i]) {
 		int j = 0;
 
+		/* iterate characters of line */
 		while (src[i][j]) {
+
 			if (src[i][j] == ' ' || src[i][j] == '\t') {
 				j++;
 				continue;
@@ -27,7 +32,7 @@ char **as_preproc(char **src, int *cnt) {
 				j += k;
 				
 				size_t size = 16;
-				char *filename = as_malloc(size * sizeof(char));
+				char *ifilename = as_malloc(size * sizeof(char));
 
 				k = 0;
 
@@ -37,33 +42,53 @@ char **as_preproc(char **src, int *cnt) {
 					while (src[i][j + k] != '"') {
 						/* skip if character is null character which means filename does not ends with double qoute */	
 						if (!src[i][j + k]) {
-							as_free(filename);
+							as_free(ifilename);
 							goto nextline;
 						}
 
 						if (k >= size) {
 							size *= 2;
-							filename = as_realloc(filename, size);
+							ifilename = as_realloc(ifilename, size);
 						}
 
-						filename[k] = src[i][j + k];
+						ifilename[k] = src[i][j + k];
 
 						k++;
 					}
+					j += k + 1;
 
-					filename = as_realloc(filename, k + 1);
-					filename[k] = 0x00;
-						printf("%s\n", filename);
+					ifilename = as_realloc(ifilename, k + 1);
+					ifilename[k] = 0x00;
 
-					FILE *stream = as_openfile(filename);
-					as_free(filename);
-
-					int cnt;
-					char **rows = as_readall(stream, &cnt);
 					/* todo */
 					/* print warning and ignores when characters are found after import keyword (skip if meet remarks) */
 					/* should implement inserting rows which are loaded from file */
 
+					while (src[i][j]) {
+						if (src[i][j] != ' ' && src[i][j] != '\t') {
+							as_free(ifilename);
+							as_warn_msg("%s:%d: warning: 'import' ignored because of trailing garbage", filename, i + 1);
+							goto nextline;
+						}
+						j++;
+					}
+
+					FILE *stream = as_openfile(ifilename);
+					as_free(ifilename);
+
+					int icnt;
+					char **rows = as_readall(stream, &icnt);
+					
+					src = as_realloc(src, (*cnt - 1 + icnt + 1) * sizeof(char *));
+
+					*cnt += icnt - 1;
+					src[*cnt] = NULL;
+
+					memcpy(src + i, rows, icnt * sizeof(char *));
+
+					as_free(rows);
+
+					goto nextline;
 				}
 				goto nextline;
 			} else {
