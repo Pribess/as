@@ -14,6 +14,6 @@
 #include "file/file.h"
 #include "alloc.h"
 
-char **as_preproc(const char *filename, char **src, int *cnt);
+void as_preproc(const char *filename, char **src, int *cnt);
 
 #endif
