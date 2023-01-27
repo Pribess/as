@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: MIT */
 /*
 		Copyright (C) 2022 Pribess (Heewon Cho)
 		src/alloc.h

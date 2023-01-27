@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# Copyright (C) 2022 Pribess (Heewon Cho)
+# Makefile
+
 CC = cc
 
 CFLAGS = -Wall
@@ -23,13 +27,3 @@ $(TARGET) : $(OBJECTS)
 
 clean:
 	rm -f $(TARGET) *.o
-
-# compilation database generator for Jetbrains Fleet
-
-.PHONY: db
-
-db:
-	compiledb -n make
-
-cleandb:
-	rm -f compile_commands.json
