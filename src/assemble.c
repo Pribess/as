@@ -13,11 +13,4 @@ void assemble(const char *filename) {
 	char **src = as_readall(stream, &cnt);
 	as_preproc(filename, src, &cnt);
 
-	printf("lines:\n");
-	int i = 0;
-	while (src[i]) {
-		printf("%s\n", src[i]);
-		i++;
-	}
-
 }
