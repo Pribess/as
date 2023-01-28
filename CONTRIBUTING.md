@@ -15,7 +15,7 @@
 
 * ## Naming
 	* ### Variables
-		In most of case local variables should be implicit and unabbreviated except specific case representatively that phrase is too long (like using `message` as `msg`)
+		In most of case local variables should be implicit and unabbreviated except specific case. representatively case that phrase is too long (like using `message` as `msg`)
 		* #### global variables
 			All global variables should have prefix `as`
 		* #### loop counter
