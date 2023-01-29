@@ -21,6 +21,9 @@
 		* #### loop counter
 			Loop counter use `i`, `j`, `k`, `l` in order
 
+	* ### Functions
+		All functions should have prefix `as` except main routine
+
 ---
 
 * ## Bracket placement
