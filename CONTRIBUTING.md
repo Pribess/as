@@ -1,7 +1,7 @@
 # Coding conventions
 
 * ## Copyright Header
-	It must be ensured that all code files have the following SPDX identifier top of each file
+	It must be ensured that all code files have the following SPDX identifier at the top of each file
 	```
 	/* SPDX-License-Identifier: MIT */
 	```
@@ -9,20 +9,20 @@
 ---
 
 * ## Indentation
-	All indentations must consist of tab
+	All indentations must consist of tabs
 
 ---
 
 * ## Naming
 	* ### Variables
-		In most of case local variables should be implicit and unabbreviated except specific case, representatively case that phrase is too long (like using `message` as `msg`)
+		Local variables should be implicit and unabbreviated except for specific cases, such as when a phrase is too long (like using `message` as `msg`)
 		* #### global variables
-			All global variables should have prefix `as`
+			All global variables should have the prefix `as`
 		* #### loop counter
-			Loop counter use `i`, `j`, `k`, `l` in order
+			Use `i`, `j`, `k`, `l` in order for loop counters
 
 	* ### Functions
-		All functions should have prefix `as` except main routine
+		All functions should have the prefix `as` except for the main routine
 
 ---
 
@@ -37,7 +37,7 @@
 ---
 
 * ## Type defining of structure 
-	Please avoid type defining structure and use structure with struct keyword when declaring and defining
+	Please avoid using type defining structures and use structures with the `struct` keyword when declaring and defining instead
 	```
 	typedef struct mystruct, mystruct_t;
 	mystruct_t s1; (✘)
@@ -48,6 +48,6 @@
 ---
 	
 * ## Comment
-	temporary comments like todo use `//`
+	Use `//` for temporary comments like todo
 
-	other comments like description of code flows use `/*` and `*/`
+	Use `/*` and `*/` for other comments like description of code flows
