@@ -31,6 +31,8 @@
 	}
 	```	
 
+---
+
 * ## Type defining of structure 
 	Please avoid type defining structure and use structure with struct keyword when declaring and defining
 	```
@@ -39,4 +41,10 @@
 
 	struct mystruct s1;(✔)
 	```
+
+---
 	
+* ## Comment
+	temporary comments like todo use `//`
+
+	other comments like description of code flows use `/*` and `*/`
