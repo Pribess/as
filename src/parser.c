@@ -61,10 +61,6 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 					ifilename = as_realloc(ifilename, k + 1);
 					ifilename[k] = 0x00;
 
-					/* todo */
-					/* print warning and ignores when characters are found after import keyword (skip if meet remarks) */
-					/* should implement inserting rows which are loaded from file */
-
 					while (src[i][j]) {
 						if (src[i][j] != ' ' && src[i][j] != '\t') {
 							as_free(ifilename);
