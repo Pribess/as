@@ -1,0 +1,20 @@
+LOCK,
+REPNE, REP,
+BND,
+OVERRIDE_CS,
+OVERRIDE_SS,
+OVERRIDE_DS,
+OVERRIDE_ES,
+OVERRIDE_FS,
+OVERRIDE_GS,
+/* 
+    branch prefiexes are not used in contemporary processors
+
+    Intel® 64 and IA-32 Architectures Software Developer’s Manual
+    Volume 2 (2A, 2B, 2C & 2D): Instruction Set Reference, A-Z
+    2.1.1 Instruction Prefiexes
+    "Some earlier microarchitectures used these as branch hints, 
+    but recent generations have not and they are reserved for future hint usage."
+*/
+OVERRIDE_OPERAND,
+OVERRIDE_ADDRESS

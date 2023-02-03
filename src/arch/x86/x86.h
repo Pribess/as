@@ -38,7 +38,15 @@ struct x86_operand {
 
 		struct x86_operand_reference {
 			struct x86_operand *ptr;
-			int size;
+			struct x86_operand_constant *disp;
+
+			/*
+				scaled indexed addressing 
+				null if not used
+			*/
+			struct x86_operand *idx;
+			int scale;
+
 		} reference;
 	};
 };
@@ -66,6 +74,10 @@ struct x86_line {
 		} label;
 
 		struct x86_line_instruction {
+			enum {
+				#include "data/prefix.dat"
+			} prefix;
+
 			int opcode;
 			struct x86_operand *operands;
 			int oprdcnt;
