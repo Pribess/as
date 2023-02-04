@@ -25,11 +25,11 @@ char *as_readline(FILE *stream) {
 	}
 
 	const size_t block = 16;
-	char *line = as_malloc((block) * sizeof(char));
+	char *line = as_malloc((block + 1) * sizeof(char));
 	int idx = 0;
 
 	while (!feof(stream)) {
-		if (!fgets(line + idx, block, stream)) {
+		if (!fgets(line + idx, block + 1, stream)) {
 			/* check if file is empty */
 			if (fgetc(stream) == EOF) {
 				return NULL;
@@ -39,16 +39,16 @@ char *as_readline(FILE *stream) {
 
 		/* if contains line feed or is end-of-file */
 		if ((line + idx)[strlen(line + idx) - 1] == '\n') {
-			line = as_realloc(line, (idx + strlen(line)) * sizeof(char));
+			line = as_realloc(line, (strlen(line) + 1) * sizeof(char));
 			/* substitute line feed to null terminator */
 			line[strlen(line) - 1] = 0x00;
 			return line;
 		} else if (feof(stream)) {
-			line = as_realloc(line, (idx + strlen(line)) * sizeof(char));
+			line = as_realloc(line, (strlen(line) + 1) * sizeof(char));
 			return line;
 		} else {
 			idx += block;
-			line = as_realloc(line, (idx + block) * sizeof(char));
+			line = as_realloc(line, (idx + block + 1) * sizeof(char));
 		}
 	}
 
