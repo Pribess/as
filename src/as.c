@@ -110,7 +110,7 @@ const char *parse_arg(int argc, char **argv) {
 	as_abort_msg("no input file");
 
 	#define ERROR(name, index) \
-		char *msg = malloc(sizeof("unknown : ") + strlen(name) + strlen(*argv + index)); \
+		char *msg = malloc((sizeof("unknown : ") + strlen(name) + strlen(*argv + index)) * sizeof(char)); \
 		sprintf(msg, "unknown %s: '%s'", name, *argv + index); \
 		as_abort_msg(msg); \
 		free(msg); \

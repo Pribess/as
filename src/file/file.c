@@ -10,7 +10,7 @@ FILE *as_openfile(const char *filename) {
 	FILE *stream;
 
 	if (!(stream = fopen(filename, "r"))) {
-		char *prefix = as_malloc(sizeof("as: ") + strlen(filename));
+		char *prefix = as_malloc((sizeof("as: ") + strlen(filename)) * sizeof(char));
 		sprintf(prefix, "%s'%s'", "as: ", filename);
 		as_abort_prefix(prefix);
 		free(prefix);
@@ -25,7 +25,7 @@ char *as_readline(FILE *stream) {
 	}
 
 	const size_t block = 16;
-	char *line = as_malloc(block * sizeof(char));
+	char *line = as_malloc((block) * sizeof(char));
 	int idx = 0;
 
 	while (!feof(stream)) {
@@ -39,16 +39,16 @@ char *as_readline(FILE *stream) {
 
 		/* if contains line feed or is end-of-file */
 		if ((line + idx)[strlen(line + idx) - 1] == '\n') {
-			line = as_realloc(line, idx + strlen(line));
+			line = as_realloc(line, (idx + strlen(line)) * sizeof(char));
 			/* substitute line feed to null terminator */
 			line[strlen(line) - 1] = 0x00;
 			return line;
 		} else if (feof(stream)) {
-			line = as_realloc(line, idx + strlen(line));
+			line = as_realloc(line, (idx + strlen(line)) * sizeof(char));
 			return line;
 		} else {
 			idx += block;
-			line = as_realloc(line, idx + block);
+			line = as_realloc(line, (idx + block) * sizeof(char));
 		}
 	}
 
@@ -58,13 +58,13 @@ char *as_readline(FILE *stream) {
 char **as_readall(FILE* stream, int *cnt) {
 	*cnt = 0;
 	size_t size = 64;
-	char **list = as_malloc(size * sizeof(char *));
+	char **list = as_malloc((size) * sizeof(char *));
 
 	while ((list[(*cnt)++] = as_readline(stream))) {
 		/* double-up size if list overflows */
 		if (*cnt >= size) {
 			size *= 2;
-			list = as_realloc(list, size * sizeof(char *));
+			list = as_realloc(list, (size) * sizeof(char *));
 		}
 	}
 	(*cnt)--;

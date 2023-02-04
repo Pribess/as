@@ -33,7 +33,7 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 				j += k;
 				
 				size_t size = 16;
-				char *ifilename = as_malloc(size * sizeof(char));
+				char *ifilename = as_malloc((size) * sizeof(char));
 
 				k = 0;
 
@@ -49,7 +49,7 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 
 						if (k >= size) {
 							size *= 2;
-							ifilename = as_realloc(ifilename, size);
+							ifilename = as_realloc(ifilename, (size) * sizeof(char));
 						}
 
 						ifilename[k] = src[i][j + k];
@@ -58,7 +58,7 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 					}
 					j += k + 1;
 
-					ifilename = as_realloc(ifilename, k + 1);
+					ifilename = as_realloc(ifilename, (k + 1) * sizeof(char));
 					ifilename[k] = 0x00;
 
 					while (src[i][j]) {
