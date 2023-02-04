@@ -27,8 +27,18 @@ void as_abort_msg(const char *msg) {
     as_exit(EXIT_FAILURE);
 }
 
-/* print warning with custom warning message */
-void as_warn_msg(const char *fmsg, ...) {
+/* abort with custom format error message */
+void as_abort_fmsg(const char *fmsg, ...) {
+    va_list list;
+	va_start(list, fmsg);
+	vfprintf(stdout, fmsg, list);
+	va_end(list);
+	printf("\n");
+    as_exit(EXIT_FAILURE);
+}
+
+/* print warning with custom format warning message */
+void as_warn_fmsg(const char *fmsg, ...) {
 	va_list list;
 	va_start(list, fmsg);
 	vfprintf(stdout, fmsg, list);
