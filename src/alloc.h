@@ -13,6 +13,8 @@
 
 void *as_malloc(size_t size);
 void *as_realloc(void *ptr, size_t size);
+
 void as_free(void *ptr);
+void as_free_all(void **ptr);
 
 #endif

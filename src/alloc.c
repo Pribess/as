@@ -27,3 +27,12 @@ void *as_realloc(void *ptr, size_t size) {
 void as_free(void *ptr) {
     free(ptr);
 }
+
+void as_free_all(void **ptr) {
+    int cnt = 0;
+    while (ptr[cnt++]) {
+        as_free(ptr[cnt - 1]);
+    }
+    
+    as_free(ptr);
+}
