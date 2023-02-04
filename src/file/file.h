@@ -8,12 +8,14 @@
 #define FILE_H
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 
 #include "../alloc.h"
 #include "../err.h"
 
 FILE *as_openfile(const char *filename);
+bool as_file_exists(const char *filename);
 char *as_readline(FILE *stream);
 char **as_readall(FILE *stream, int *cnt);
 

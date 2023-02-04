@@ -19,6 +19,13 @@ FILE *as_openfile(const char *filename) {
 	return stream;
 }
 
+bool as_file_exists(const char *filename) {
+	FILE *stream;
+	if (!(stream = fopen(filename, "r"))) return false;
+	fclose(stream);
+	return true;
+}
+
 char *as_readline(FILE *stream) {
 	if (!stream) {
 		return NULL;
@@ -73,6 +80,7 @@ char **as_readall(FILE* stream, int *cnt) {
 
 	/* resize to fit */
 	list = as_realloc(list, (*cnt + 1) * sizeof(char *));
+	printf("dbg\n");
 
 	return list;
 }
