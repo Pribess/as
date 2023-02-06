@@ -5,8 +5,6 @@
 */
 
 #include "parser.h"
-#include "alloc.h"
-#include "err.h"
 
 void as_preproc(const char *filename, char **src, int *cnt) {
 	int i = 0;
@@ -17,7 +15,6 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 
 		/* iterate characters of line */
 		while (src[i][j]) {
-
 			if (src[i][j] == ' ' || src[i][j] == '\t') {
 				j++;
 				continue;
@@ -33,61 +30,93 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 				j += k;
 				
 				size_t size = 16;
-				char *ifilename = as_malloc((size) * sizeof(char));
+				char *imported_filename = as_malloc((size) * sizeof(char));
 
 				k = 0;
-
 				/* if filename is normaly provided */
 				if (src[i][j++] == '"') {
 					/* iterating until meet double quote */
 					while (src[i][j + k] != '"') {
 						/* skip if character is null character which means filename does not ends with double qoute */	
 						if (!src[i][j + k]) {
-							as_free(ifilename);
+							as_free(imported_filename);
 							goto nextline;
 						}
 
 						if (k >= size) {
 							size *= 2;
-							ifilename = as_realloc(ifilename, (size) * sizeof(char));
+							imported_filename = as_realloc(imported_filename, (size) * sizeof(char));
 						}
 
-						ifilename[k] = src[i][j + k];
+						imported_filename[k] = src[i][j + k];
 
 						k++;
 					}
 					j += k + 1;
 
-					ifilename = as_realloc(ifilename, (k + 1) * sizeof(char));
-					ifilename[k] = 0x00;
+					/* resize to fit */
+					imported_filename = as_realloc(imported_filename, (k + 1) * sizeof(char));
+					imported_filename[k] = 0x00;
 
+					/* check if trailing garbage exists */
 					while (src[i][j]) {
 						if (src[i][j] != ' ' && src[i][j] != '\t') {
-							as_free(ifilename);
-							as_warn_msg("%s:%d: warning: 'import' ignored because of trailing garbage", filename, i + 1);
-							goto nextline;
+							as_free(imported_filename);
+							as_warn_fmsg("%s:%d: warning: trailing garbage after 'import' ignored", filename, i + 1);
+							break;
 						}
 						j++;
 					}
 
-					FILE *stream = as_openfile(ifilename);
-					as_free(ifilename);
-
-					int icnt;
-					char **rows = as_readall(stream, &icnt);
+					/* convert to relative file path of file which is processing */
+					int l = strlen(filename) - 1;
+					while (!(l < 0) && filename[l--] != '/'); /* count last component of path */
+					/* correct not intended decreases (postfix decrement and length) */
+					if (l == -1) l++;
+					else l += 2;
 					
-					src = as_realloc(src, (*cnt - 1 + icnt + 1) * sizeof(char *));
+					/* 
+						strlen("example/of/path/") + strlen("imported/filename")
+						equals to
+						strlen("example/of/path/imported/filename")
+					*/
+					char *relative_filename = malloc((l + strlen(imported_filename) + 1) * sizeof(char));
+					
+					strncpy(relative_filename, filename, l);
+					strcpy(relative_filename + l, imported_filename);
 
-					*cnt += icnt - 1;
+					/* open file and append it to file which is processing */
+					if (!as_file_exists(relative_filename)) {
+						as_free(imported_filename);
+						as_abort_fmsg("%s: %d: '%s': No such file or directory", filename, i + 1, relative_filename);
+						as_free(relative_filename);
+					}
+
+					FILE *stream = as_openfile(relative_filename);
+
+					int imported_cnt;
+					char **imported_source = as_readall(stream, &imported_cnt);
+
+					as_preproc(relative_filename, imported_source, &imported_cnt);
+
+					as_free(relative_filename);
+					
+					src = as_realloc(src, (*cnt - 1 + imported_cnt + 1) * sizeof(char *));
+
+					*cnt += imported_cnt - 1;
 					src[*cnt] = NULL;
+					
+					memcpy(src + i + imported_cnt, src + i + 1, (*cnt - (imported_cnt - 1) - (i + 1)) * sizeof(char *)); /* move existing to back of imported source */
+					memcpy(src + i, imported_source, (imported_cnt) * sizeof(char *));
 
-					memcpy(src + i, rows, icnt * sizeof(char *));
 
-					as_free(rows);
+					// as_free(imported_source);
 
 					goto nextline;
+				} else {
+					as_free(imported_filename);
+					as_abort_fmsg("%s: %d: filename does not properly provided", filename, i + 1);
 				}
-				goto nextline;
 			} else {
 				goto nextline;
 			}
