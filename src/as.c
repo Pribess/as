@@ -41,8 +41,8 @@ const char *parse_arg(int argc, char **argv) {
 	argv++;
 	
 	if (argc < 1) {
-			usage();
-			as_exit(EXIT_FAILURE);
+		usage();
+		as_exit(EXIT_FAILURE);
 	}
 
 	int proceeded = 0;
