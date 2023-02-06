@@ -12,9 +12,7 @@ void assemble(const char *filename) {
 	
 	int cnt;
 	char **src = as_readall(stream, &cnt);
-	
-	as_preproc(filename, src, &cnt);
 
-	
+	as_preproc(filename, src, &cnt);
 
 }

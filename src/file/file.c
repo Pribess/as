@@ -80,7 +80,6 @@ char **as_readall(FILE* stream, int *cnt) {
 
 	/* resize to fit */
 	list = as_realloc(list, (*cnt + 1) * sizeof(char *));
-	printf("dbg\n");
 
 	return list;
 }
