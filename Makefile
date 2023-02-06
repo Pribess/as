@@ -13,7 +13,7 @@ SOURCES = $(shell find ./src -name "*.c")
 OBJECTS = $(SOURCES:.c=.o)
 
 .PHONY: all
-all : $(TARGET) $(LIB)
+all : $(TARGET)
 
 
 $(TARGET) : $(OBJECTS)
