@@ -13,7 +13,6 @@ FILE *as_openfile(const char *filename) {
 		char *prefix = as_malloc((sizeof("as: ") + strlen(filename)) * sizeof(char));
 		sprintf(prefix, "%s'%s'", "as: ", filename);
 		as_abort_prefix(prefix);
-		free(prefix);
 	}
 
 	return stream;

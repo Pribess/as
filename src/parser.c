@@ -6,7 +6,7 @@
 
 #include "parser.h"
 
-void as_preproc(const char *filename, char **src, int *cnt) {
+char **as_preproc(const char *filename, char **src, int *cnt) {
 	int i = 0;
 
 	/* iterate lines */
@@ -61,7 +61,6 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 					/* check if trailing garbage exists */
 					while (src[i][j]) {
 						if (src[i][j] != ' ' && src[i][j] != '\t') {
-							as_free(imported_filename);
 							as_warn_fmsg("%s:%d: warning: trailing garbage after 'import' ignored", filename, i + 1);
 							break;
 						}
@@ -85,11 +84,11 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 					strncpy(relative_filename, filename, l);
 					strcpy(relative_filename + l, imported_filename);
 
+					as_free(imported_filename);
+
 					/* open file and append it to file which is processing */
 					if (!as_file_exists(relative_filename)) {
-						as_free(imported_filename);
 						as_abort_fmsg("%s: %d: '%s': No such file or directory", filename, i + 1, relative_filename);
-						as_free(relative_filename);
 					}
 
 					FILE *stream = as_openfile(relative_filename);
@@ -99,8 +98,6 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 
 					as_preproc(relative_filename, imported_source, &imported_cnt);
 
-					as_free(relative_filename);
-					
 					src = as_realloc(src, (*cnt - 1 + imported_cnt + 1) * sizeof(char *));
 
 					*cnt += imported_cnt - 1;
@@ -110,11 +107,11 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 					memcpy(src + i, imported_source, (imported_cnt) * sizeof(char *));
 
 
-					// as_free(imported_source);
+					as_free(imported_source);
+					as_free(relative_filename);
 
 					goto nextline;
 				} else {
-					as_free(imported_filename);
 					as_abort_fmsg("%s: %d: filename does not properly provided", filename, i + 1);
 				}
 			} else {
@@ -125,4 +122,6 @@ void as_preproc(const char *filename, char **src, int *cnt) {
 		nextline:
 			i++;
 	}
+
+	return src;
 }

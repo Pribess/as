@@ -112,8 +112,7 @@ const char *parse_arg(int argc, char **argv) {
 	#define ERROR(name, index) \
 		char *msg = malloc((sizeof("unknown : ") + strlen(name) + strlen(*argv + index)) * sizeof(char)); \
 		sprintf(msg, "unknown %s: '%s'", name, *argv + index); \
-		as_abort_msg(msg); \
-		free(msg); \
+		as_abort_msg(msg);
 
 	err_unknown_option: {
 		ERROR("option", 0);
