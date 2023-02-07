@@ -102,7 +102,9 @@ char **as_preproc(const char *filename, char **src, int *cnt) {
 
 					*cnt += imported_cnt - 1;
 					src[*cnt] = NULL;
-					
+
+					as_free(*(src + i));
+
 					memcpy(src + i + imported_cnt, src + i + 1, (*cnt - (imported_cnt - 1) - (i + 1)) * sizeof(char *)); /* move existing to back of imported source */
 					memcpy(src + i, imported_source, (imported_cnt) * sizeof(char *));
 
