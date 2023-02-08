@@ -16,5 +16,5 @@ OVERRIDE_GS,
     "Some earlier microarchitectures used these as branch hints, 
     but recent generations have not and they are reserved for future hint usage."
 */
-OVERRIDE_OPERAND,
-OVERRIDE_ADDRESS
+OVERRIDE_OPERAND_SIZE,
+OVERRIDE_ADDRESS_SIZE
