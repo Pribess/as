@@ -14,6 +14,8 @@
 #include "file/file.h"
 #include "parser.h"
 
+#include "arch/x86/x86.h"
+
 void assemble(const char *filename);
 
 #endif
