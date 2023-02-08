@@ -6,7 +6,7 @@
 
 #include "parser.h"
 
-char **as_preproc(const char *filename, char **src, int *cnt) {
+char **as_preproc(const char *filename, char **src, int *cnt, struct import_meta *metadata) {
 	int i = 0;
 
 	/* iterate lines */
@@ -84,8 +84,6 @@ char **as_preproc(const char *filename, char **src, int *cnt) {
 					strncpy(relative_filename, filename, l);
 					strcpy(relative_filename + l, imported_filename);
 
-					as_free(imported_filename);
-
 					/* open file and append it to file which is processing */
 					if (!as_file_exists(relative_filename)) {
 						as_abort_fmsg("%s: %d: '%s': No such file or directory", filename, i + 1, relative_filename);
@@ -96,21 +94,39 @@ char **as_preproc(const char *filename, char **src, int *cnt) {
 					int imported_cnt;
 					char **imported_source = as_readall(stream, &imported_cnt);
 
-					as_preproc(relative_filename, imported_source, &imported_cnt);
+					/* add import meta data to print line which has error in other process */
+					if (metadata->children_cap < metadata->children_cnt + 1) {
+						metadata->children_cap *= 2;
+						metadata->children = as_realloc(metadata->children, (metadata->children_cap) * sizeof(struct import_meta *));
+					}
+					metadata->children[metadata->children_cnt] = malloc(sizeof(struct import_meta));
+					metadata->children[metadata->children_cnt]->filename = imported_filename;
+					size_t pushed_offset = 0;
+					for (int n = 0 ; n < metadata->children_cnt ; n++) {
+						pushed_offset += metadata->children[n]->size - 1;
+					}
+					metadata->children[metadata->children_cnt]->imported_line = i + 1 - pushed_offset;
+					metadata->children[metadata->children_cnt]->size = imported_cnt;
+					metadata->children[metadata->children_cnt]->children = as_malloc((4) * sizeof(struct import_meta *));
+					metadata->children[metadata->children_cnt]->children_cap = 4;
+					metadata->children[metadata->children_cnt]->children_cnt = 0;
+
+					as_preproc(relative_filename, imported_source, &imported_cnt, metadata->children[metadata->children_cnt]);
+
+					metadata->children_cnt++;
 
 					src = as_realloc(src, (*cnt - 1 + imported_cnt + 1) * sizeof(char *));
 
 					*cnt += imported_cnt - 1;
 					src[*cnt] = NULL;
 
-					as_free(*(src + i));
+					as_free(*(src + i)); /* free line which had contained import keyword */
 
 					memcpy(src + i + imported_cnt, src + i + 1, (*cnt - (imported_cnt - 1) - (i + 1)) * sizeof(char *)); /* move existing to back of imported source */
 					memcpy(src + i, imported_source, (imported_cnt) * sizeof(char *));
 
 
 					as_free(imported_source);
-					as_free(relative_filename);
 
 					goto nextline;
 				} else {
@@ -127,3 +143,4 @@ char **as_preproc(const char *filename, char **src, int *cnt) {
 
 	return src;
 }
+
