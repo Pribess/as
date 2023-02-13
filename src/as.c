@@ -123,7 +123,7 @@ const char *parse_arg(int argc, char **argv) {
 	}
 
 	err_unknown_format: {
-		ERROR("format", 9)
+		ERROR("format", 9);
 	}
 
 	/* control flow never reaches here */

@@ -88,4 +88,6 @@ struct x86_line {
 	struct err err;
 };
 
+struct x86_line *as_x86_parse();
+
 #endif
