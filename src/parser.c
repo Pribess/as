@@ -6,7 +6,7 @@
 
 #include "parser.h"
 
-char **as_preproc(const char *filename, char **src, int *cnt, struct import_meta *metadata) {
+char **as_preproc(const char *filename, char **src, int *cnt, struct metadata *src_metadata) {
 	int i = 0;
 
 	/* iterate lines */
@@ -18,6 +18,10 @@ char **as_preproc(const char *filename, char **src, int *cnt, struct import_meta
 			if (src[i][j] == ' ' || src[i][j] == '\t') {
 				j++;
 				continue;
+
+			/* skip line if meets comment */
+			} else if (src[i][j] == '|') { 
+				goto nextline;
 			} else if (src[i][j] == 'i') {
 				int k = 0;
 
@@ -95,25 +99,25 @@ char **as_preproc(const char *filename, char **src, int *cnt, struct import_meta
 					char **imported_source = as_readall(stream, &imported_cnt);
 
 					/* add import meta data to print line which has error in other process */
-					if (metadata->children_cap < metadata->children_cnt + 1) {
-						metadata->children_cap *= 2;
-						metadata->children = as_realloc(metadata->children, (metadata->children_cap) * sizeof(struct import_meta *));
+					if (src_metadata->children_cap < src_metadata->children_cnt + 1) {
+						src_metadata->children_cap *= 2;
+						src_metadata->children = as_realloc(src_metadata->children, (src_metadata->children_cap) * sizeof(struct metadata *));
 					}
-					metadata->children[metadata->children_cnt] = malloc(sizeof(struct import_meta));
-					metadata->children[metadata->children_cnt]->filename = imported_filename;
+					src_metadata->children[src_metadata->children_cnt] = malloc(sizeof(struct metadata));
+					src_metadata->children[src_metadata->children_cnt]->filename = imported_filename;
 					size_t pushed_offset = 0;
-					for (int n = 0 ; n < metadata->children_cnt ; n++) {
-						pushed_offset += metadata->children[n]->size - 1;
+					for (int n = 0 ; n < src_metadata->children_cnt ; n++) {
+						pushed_offset += src_metadata->children[n]->size - 1;
 					}
-					metadata->children[metadata->children_cnt]->imported_line = i + 1 - pushed_offset;
-					metadata->children[metadata->children_cnt]->size = imported_cnt;
-					metadata->children[metadata->children_cnt]->children = as_malloc((4) * sizeof(struct import_meta *));
-					metadata->children[metadata->children_cnt]->children_cap = 4;
-					metadata->children[metadata->children_cnt]->children_cnt = 0;
+					src_metadata->children[src_metadata->children_cnt]->imported_line = i + 1 - pushed_offset;
+					src_metadata->children[src_metadata->children_cnt]->size = imported_cnt;
+					src_metadata->children[src_metadata->children_cnt]->children = as_malloc((4) * sizeof(struct metadata *));
+					src_metadata->children[src_metadata->children_cnt]->children_cap = 4;
+					src_metadata->children[src_metadata->children_cnt]->children_cnt = 0;
 
-					as_preproc(relative_filename, imported_source, &imported_cnt, metadata->children[metadata->children_cnt]);
+					as_preproc(relative_filename, imported_source, &imported_cnt, src_metadata->children[src_metadata->children_cnt]);
 
-					metadata->children_cnt++;
+					src_metadata->children_cnt++;
 
 					src = as_realloc(src, (*cnt - 1 + imported_cnt + 1) * sizeof(char *));
 
