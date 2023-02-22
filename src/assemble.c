@@ -8,7 +8,7 @@
 
 extern int as_arch;
 
-// static void test(const char *parent, struct import_meta *metadata) {
+// static void test(const char *parent, struct metadata *metadata) {
 // 	for (int i = 0 ; i < metadata->children_cnt ; i++) {
 // 		printf("parent: %s     index: %d     imported filename: %s     imported line: %d     size: %d\n",
 // 			parent,
@@ -28,20 +28,21 @@ void assemble(const char *filename) {
 	int cnt;
 	char **src = as_readall(stream, &cnt);
 	
-	struct import_meta metadata;
-	metadata.filename = filename;
-	metadata.imported_line = 0;
-	metadata.size = cnt;
-	metadata.children = as_malloc((4) * sizeof(struct import_meta *));
-	metadata.children_cap = 4;
-	metadata.children_cnt = 0;
+	struct metadata src_metadata;
+	src_metadata.filename = filename;
+	src_metadata.imported_line = 0;
+	src_metadata.size = cnt;
+	src_metadata.children = as_malloc((4) * sizeof(struct metadata *));
+	src_metadata.children_cap = 4;
+	src_metadata.children_cnt = 0;
 
-	src = as_preproc(filename, src, &cnt, &metadata);
+	src = as_preproc(filename, src, &cnt, &src_metadata);
 
 	// test(filename, &metadata);
 
 	switch (as_arch) {
 		case ARCH_x86: {
+			struct x86_line *lines = as_x86_parse(src, cnt, &src_metadata);
 			break;
 		}
 

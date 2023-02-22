@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "../../parser.h"
 #include "../../err.h"
 
 struct x86_operand {
@@ -88,6 +89,6 @@ struct x86_line {
 	struct err err;
 };
 
-struct x86_line *as_x86_parse();
+struct x86_line *as_x86_parse(char **src, int cnt, struct metadata *src_metadata);
 
 #endif

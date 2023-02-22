@@ -15,15 +15,15 @@
 #include "file/file.h"
 #include "alloc.h"
 
-struct import_meta {
+struct metadata {
 	const char *filename;
 	size_t size;
 	int imported_line; /* member which represent line of parent which imports this file */
-	struct import_meta **children;
+	struct metadata **children;
 	int children_cnt;
 	size_t children_cap;
 };
 
-char **as_preproc(const char *filename, char **src, int *cnt, struct import_meta *metadata);
+char **as_preproc(const char *filename, char **src, int *cnt, struct metadata *metadata);
 
 #endif
