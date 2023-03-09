@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "file/file.h"
 #include "alloc.h"
@@ -24,6 +25,16 @@ struct metadata {
 	size_t children_cap;
 };
 
-char **as_preproc(const char *filename, char **src, int *cnt, struct metadata *metadata);
+struct equ {
+	const char *symbol;
+	const char *value;
+	bool purged;
+};
+
+char **as_preproc(char **src, int *cnt, struct metadata *src_metadata);
+char **as_preproc_import(char **src, int *cnt, struct metadata *src_metadata, char *error_annotation);
+
+char *as_resolve_actual_row(char **src, int row, struct metadata *src_metadata);
+bool as_is_banned_keyword(char *keyword);
 
 #endif

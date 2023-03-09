@@ -8,16 +8,16 @@
 
 extern int as_arch;
 
-// static void test(const char *parent, struct metadata *metadata) {
+// static void test(struct metadata *metadata) {
 // 	for (int i = 0 ; i < metadata->children_cnt ; i++) {
 // 		printf("parent: %s     index: %d     imported filename: %s     imported line: %d     size: %d\n",
-// 			parent,
+// 			metadata->filename,
 // 			i,
 // 			metadata->children[i]->filename,
 // 			metadata->children[i]->imported_line,
 // 			metadata->children[i]->size
 // 		);
-// 		test(metadata->children[i]->filename, metadata->children[i]);
+// 		test(metadata->children[i]);
 // 	}
 // }
 
@@ -36,9 +36,9 @@ void assemble(const char *filename) {
 	src_metadata.children_cap = 4;
 	src_metadata.children_cnt = 0;
 
-	src = as_preproc(filename, src, &cnt, &src_metadata);
+	src = as_preproc(src, &cnt, &src_metadata);
 
-	// test(filename, &metadata);
+	// test(&src_metadata);
 
 	switch (as_arch) {
 		case ARCH_x86: {
